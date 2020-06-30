@@ -162,8 +162,8 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
     @Override
     public void render() {
         super.render();
-        state.update(Gdx.graphics.getDeltaTime()); // Update the animation time.
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        state.update(graphics.getDeltaTime()); // Update the animation time.
+        graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (state.apply(skeleton)) // Poses skeleton using current animations. This sets the bones' local SRT.
             skeleton.updateWorldTransform(); // Uses the bones' local SRT to compute their world SRT.

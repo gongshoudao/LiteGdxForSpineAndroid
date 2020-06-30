@@ -19,8 +19,10 @@ package com.badlogic.gdx;
 /** Convenience implementation of {@link ApplicationListener}. Derive from this and only override what you need.
  * @author mzechner */
 public abstract class ApplicationAdapter implements ApplicationListener {
+	protected Graphics graphics;
 	@Override
 	public void create(Graphics graphics) {
+		this.graphics = graphics;
 	}
 
 	@Override
