@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.scenes.scene2d;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Affine2;
@@ -42,6 +43,10 @@ public class Group extends Actor implements Cullable {
 	private final Matrix4 oldTransform = new Matrix4();
 	boolean transform = true;
 	private @Null Rectangle cullingArea;
+
+	public Group(Graphics graphics) {
+		super(graphics);
+	}
 
 	public void act (float delta) {
 		super.act(delta);

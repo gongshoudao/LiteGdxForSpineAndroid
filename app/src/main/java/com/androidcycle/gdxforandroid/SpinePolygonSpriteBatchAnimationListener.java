@@ -7,6 +7,7 @@ import android.text.TextPaint;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,10 +45,10 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
     AnimationState state;
 
     @Override
-    public void create() {
-        super.create();
+    public void create(Graphics graphics) {
+        super.create(graphics);
         camera = new OrthographicCamera();
-        batch = new PolygonSpriteBatch();
+        batch = new PolygonSpriteBatch(graphics);
         renderer = new SkeletonRenderer();
         renderer.setPremultipliedAlpha(true);
         debugRenderer = new SkeletonRendererDebug();

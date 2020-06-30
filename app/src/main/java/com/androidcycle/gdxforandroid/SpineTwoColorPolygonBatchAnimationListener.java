@@ -2,6 +2,7 @@ package com.androidcycle.gdxforandroid;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TwoColorPolygonBatch;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Event;
@@ -23,7 +25,6 @@ import com.esotericsoftware.spine.Slot;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
-import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
 public class SpineTwoColorPolygonBatchAnimationListener extends ApplicationAdapter {
     OrthographicCamera camera;
@@ -37,10 +38,10 @@ public class SpineTwoColorPolygonBatchAnimationListener extends ApplicationAdapt
     AnimationState state;
 
     @Override
-    public void create() {
-        super.create();
+    public void create(Graphics graphics) {
+        super.create(graphics);
         camera = new OrthographicCamera();
-        batch = new TwoColorPolygonBatch();
+        batch = new TwoColorPolygonBatch(graphics);
         renderer = new SkeletonRenderer();
         renderer.setPremultipliedAlpha(true);
         debugRenderer = new SkeletonRendererDebug();

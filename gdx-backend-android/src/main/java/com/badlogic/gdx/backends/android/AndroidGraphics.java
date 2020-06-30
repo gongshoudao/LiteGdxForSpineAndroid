@@ -280,7 +280,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 		updateSafeAreaInsets();
 		gl.glViewport(0, 0, this.width, this.height);
 		if (!created) {
-			app.getApplicationListener().create();
+			app.getApplicationListener().create(this);
 			created = true;
 			synchronized (this) {
 				running = true;

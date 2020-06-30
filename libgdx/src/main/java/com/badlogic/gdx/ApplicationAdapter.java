@@ -20,7 +20,7 @@ package com.badlogic.gdx;
  * @author mzechner */
 public abstract class ApplicationAdapter implements ApplicationListener {
 	@Override
-	public void create () {
+	public void create(Graphics graphics) {
 	}
 
 	@Override
