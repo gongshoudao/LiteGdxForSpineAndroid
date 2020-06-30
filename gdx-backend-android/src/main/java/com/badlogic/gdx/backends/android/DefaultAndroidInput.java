@@ -25,9 +25,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Handler;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -471,42 +469,6 @@ public class DefaultAndroidInput implements AndroidInput {
 		return true;
 	}
 
-// TODO Seems unused. Delete when confirmed.
-//	/** Called in {@link AndroidLiveWallpaperService} on tap
-//	 * @param x
-//	 * @param y */
-//	public void onTap (int x, int y) {
-//		postTap(x, y);
-//	}
-//
-//	/** Called in {@link AndroidLiveWallpaperService} on drop
-//	 * @param x
-//	 * @param y */
-//	public void onDrop (int x, int y) {
-//		postTap(x, y);
-//	}
-//
-//	protected void postTap (int x, int y) {
-//		synchronized (this) {
-//			TouchEvent event = usedTouchEvents.obtain();
-//			event.timeStamp = System.nanoTime();
-//			event.pointer = 0;
-//			event.x = x;
-//			event.y = y;
-//			event.type = TouchEvent.TOUCH_DOWN;
-//			touchEvents.add(event);
-//
-//			event = usedTouchEvents.obtain();
-//			event.timeStamp = System.nanoTime();
-//			event.pointer = 0;
-//			event.x = x;
-//			event.y = y;
-//			event.type = TouchEvent.TOUCH_UP;
-//			touchEvents.add(event);
-//		}
-//		Gdx.app.getGraphics().requestRendering();
-//	}
-
 	@Override
 	public boolean onKey (View v, int keyCode, android.view.KeyEvent e) {
 		for (int i = 0, n = keyListeners.size(); i < n; i++)
@@ -649,27 +611,6 @@ public class DefaultAndroidInput implements AndroidInput {
 	@Override
 	public boolean isCatchKey (int keycode) {
 		return keysToCatch.contains(keyCount);
-	}
-
-	@Override
-	public void vibrate (int milliseconds) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
-		else
-			vibrator.vibrate(milliseconds);
-	}
-
-	@Override
-	public void vibrate (long[] pattern, int repeat) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-			vibrator.vibrate(VibrationEffect.createWaveform(pattern, repeat));
-		else
-			vibrator.vibrate(pattern, repeat);
-	}
-
-	@Override
-	public void cancelVibrate () {
-		vibrator.cancel();
 	}
 
 	@Override
@@ -1002,20 +943,6 @@ public class DefaultAndroidInput implements AndroidInput {
 	@Override
 	public void onResume () {
 		registerSensorListeners();
-	}
-
-	@Override
-	public void onDreamingStarted () {
-		registerSensorListeners();
-	}
-
-	@Override
-	public void onDreamingStopped () {
-		unregisterSensorListeners();
-		// erase pointer ids. this sucks donkeyballs...
-		Arrays.fill(realId, -1);
-		// erase touched state. this also sucks donkeyballs...
-		Arrays.fill(touched, false);
 	}
 
 	/** Our implementation of SensorEventListener. Because Android doesn't like it when we register more than one Sensor to a single

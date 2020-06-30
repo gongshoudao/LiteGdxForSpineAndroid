@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         Gdx.audio = null;
         Gdx.input = null;
         Gdx.files = null;
-        Gdx.net = null;
         Gdx.gl = null;
         Gdx.gl20 = null;
         Gdx.gl30 = null;

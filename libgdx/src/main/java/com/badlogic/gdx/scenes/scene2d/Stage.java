@@ -33,8 +33,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Table.Debug;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
@@ -64,8 +62,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * @author mzechner
  * @author Nathan Sweet */
 public class Stage extends InputAdapter implements Disposable {
-	/** True if any actor has ever had debug enabled. */
-	static boolean debug;
 
 	private Viewport viewport;
 	private final Batch batch;
@@ -84,7 +80,6 @@ public class Stage extends InputAdapter implements Disposable {
 
 	private ShapeRenderer debugShapes;
 	private boolean debugInvisible, debugAll, debugUnderMouse, debugParentUnderMouse;
-	private Debug debugTableUnderMouse = Debug.none;
 	private final Color debugColor = new Color(0, 1, 0, 0.85f);
 
 	/** Creates a stage with a {@link ScalingViewport} set to {@link Scaling#stretch}. The stage will use its own {@link Batch}
@@ -129,46 +124,6 @@ public class Stage extends InputAdapter implements Disposable {
 		root.draw(batch, 1);
 		batch.end();
 
-		if (debug) drawDebug();
-	}
-
-	private void drawDebug () {
-		if (debugShapes == null) {
-			debugShapes = new ShapeRenderer();
-			debugShapes.setAutoShapeType(true);
-		}
-
-		if (debugUnderMouse || debugParentUnderMouse || debugTableUnderMouse != Debug.none) {
-			screenToStageCoordinates(tempCoords.set(Gdx.input.getX(), Gdx.input.getY()));
-			Actor actor = hit(tempCoords.x, tempCoords.y, true);
-			if (actor == null) return;
-
-			if (debugParentUnderMouse && actor.parent != null) actor = actor.parent;
-
-			if (debugTableUnderMouse == Debug.none)
-				actor.setDebug(true);
-			else {
-				while (actor != null) {
-					if (actor instanceof Table) break;
-					actor = actor.parent;
-				}
-				if (actor == null) return;
-				((Table)actor).debug(debugTableUnderMouse);
-			}
-
-			if (debugAll && actor instanceof Group) ((Group)actor).debugAll();
-
-			disableDebug(root, actor);
-		} else {
-			if (debugAll) root.debugAll();
-		}
-
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		debugShapes.setProjectionMatrix(viewport.getCamera().combined);
-		debugShapes.begin();
-		root.drawDebug(debugShapes);
-		debugShapes.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 
 	/** Disables debug on all actors recursively except the specified actor and any children. */
@@ -773,65 +728,6 @@ public class Stage extends InputAdapter implements Disposable {
 	/** The default color that can be used by actors to draw debug lines. */
 	public Color getDebugColor () {
 		return debugColor;
-	}
-
-	/** If true, debug lines are shown for actors even when {@link Actor#isVisible()} is false. */
-	public void setDebugInvisible (boolean debugInvisible) {
-		this.debugInvisible = debugInvisible;
-	}
-
-	/** If true, debug lines are shown for all actors. */
-	public void setDebugAll (boolean debugAll) {
-		if (this.debugAll == debugAll) return;
-		this.debugAll = debugAll;
-		if (debugAll)
-			debug = true;
-		else
-			root.setDebug(false, true);
-	}
-
-	public boolean isDebugAll () {
-		return debugAll;
-	}
-
-	/** If true, debug is enabled only for the actor under the mouse. Can be combined with {@link #setDebugAll(boolean)}. */
-	public void setDebugUnderMouse (boolean debugUnderMouse) {
-		if (this.debugUnderMouse == debugUnderMouse) return;
-		this.debugUnderMouse = debugUnderMouse;
-		if (debugUnderMouse)
-			debug = true;
-		else
-			root.setDebug(false, true);
-	}
-
-	/** If true, debug is enabled only for the parent of the actor under the mouse. Can be combined with
-	 * {@link #setDebugAll(boolean)}. */
-	public void setDebugParentUnderMouse (boolean debugParentUnderMouse) {
-		if (this.debugParentUnderMouse == debugParentUnderMouse) return;
-		this.debugParentUnderMouse = debugParentUnderMouse;
-		if (debugParentUnderMouse)
-			debug = true;
-		else
-			root.setDebug(false, true);
-	}
-
-	/** If not {@link Debug#none}, debug is enabled only for the first ascendant of the actor under the mouse that is a table. Can
-	 * be combined with {@link #setDebugAll(boolean)}.
-	 * @param debugTableUnderMouse May be null for {@link Debug#none}. */
-	public void setDebugTableUnderMouse (@Null Debug debugTableUnderMouse) {
-		if (debugTableUnderMouse == null) debugTableUnderMouse = Debug.none;
-		if (this.debugTableUnderMouse == debugTableUnderMouse) return;
-		this.debugTableUnderMouse = debugTableUnderMouse;
-		if (debugTableUnderMouse != Debug.none)
-			debug = true;
-		else
-			root.setDebug(false, true);
-	}
-
-	/** If true, debug is enabled only for the first ascendant of the actor under the mouse that is a table. Can be combined with
-	 * {@link #setDebugAll(boolean)}. */
-	public void setDebugTableUnderMouse (boolean debugTableUnderMouse) {
-		setDebugTableUnderMouse(debugTableUnderMouse ? Debug.all : Debug.none);
 	}
 
 	public void dispose () {

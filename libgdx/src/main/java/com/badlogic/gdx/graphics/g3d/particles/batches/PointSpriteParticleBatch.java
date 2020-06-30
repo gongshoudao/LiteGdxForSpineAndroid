@@ -84,7 +84,7 @@ public class PointSpriteParticleBatch extends BufferedParticleBatch<PointSpriteC
 
 		allocRenderable();
 		ensureCapacity(capacity);
-		renderable.shader = new ParticleShader(renderable, shaderConfig);
+		renderable.shader = new ParticleShader(renderable, shaderConfig, graphics);
 		renderable.shader.init();
 	}
 

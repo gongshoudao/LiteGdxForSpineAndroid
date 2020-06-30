@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.graphics.g3d.shaders;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GLTexture;
@@ -111,6 +112,7 @@ public abstract class BaseShader implements Shader {
 	public RenderContext context;
 	public Camera camera;
 	private Mesh currentMesh;
+	public Graphics mGraphics;
 
 	/** Register an uniform which might be used by this shader. Only possible prior to the call to init().
 	 * @return The ID of the uniform to use in this shader. */

@@ -64,6 +64,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 	int height;
 	int safeInsetLeft, safeInsetTop, safeInsetBottom, safeInsetRight;
 	AndroidApplicationBase app;
+	GL20 gl;
 	GL20 gl20;
 	GL30 gl30;
 	EGLContext eglContext;
@@ -184,6 +185,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 	public void setGL20 (GL20 gl20) {
 		this.gl20 = gl20;
 		if (gl30 == null) {
+			gl = gl20;
 			Gdx.gl = gl20;
 			Gdx.gl20 = gl20;
 		}
@@ -208,6 +210,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 		if (gl30 != null) {
 			this.gl20 = gl30;
 
+			this.gl = gl20;
 			Gdx.gl = gl20;
 			Gdx.gl20 = gl20;
 			Gdx.gl30 = gl30;
@@ -250,6 +253,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 			if (gl30 != null) return;
 			gl20 = gl30 = new AndroidGL30();
 
+			this.gl = gl30;
 			Gdx.gl = gl30;
 			Gdx.gl20 = gl30;
 			Gdx.gl30 = gl30;
@@ -257,6 +261,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 			if (gl20 != null) return;
 			gl20 = new AndroidGL20();
 
+			this.gl = gl20;
 			Gdx.gl = gl20;
 			Gdx.gl20 = gl20;
 		}
@@ -274,7 +279,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 		updatePpi();
 		updateSafeAreaInsets();
 		gl.glViewport(0, 0, this.width, this.height);
-		if (created == false) {
+		if (!created) {
 			app.getApplicationListener().create();
 			created = true;
 			synchronized (this) {
@@ -709,7 +714,7 @@ public class AndroidGraphics implements Graphics, Renderer {
 
 	@Override
 	public boolean supportsExtension (String extension) {
-		if (extensions == null) extensions = Gdx.gl.glGetString(GL10.GL_EXTENSIONS);
+		if (extensions == null) extensions = gl.glGetString(GL10.GL_EXTENSIONS);
 		return extensions.contains(extension);
 	}
 

@@ -41,7 +41,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 	protected AndroidInput input;
 	protected AndroidAudio audio;
 	protected AndroidFiles files;
-	protected AndroidNet net;
 	protected AndroidClipboard clipboard;
 	protected ApplicationListener listener;
 	public Handler handler;
@@ -138,7 +137,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 		input = createInput(this, getActivity(), graphics.view, config);
 		audio = createAudio(getActivity(), config);
 		files = new AndroidFiles(getResources().getAssets(), getActivity().getFilesDir().getAbsolutePath());
-		net = new AndroidNet(this, config);
 		this.listener = listener;
 		this.handler = new Handler();
 		this.clipboard = new AndroidClipboard(getActivity());
@@ -167,7 +165,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 		Gdx.graphics = this.getGraphics();
-		Gdx.net = this.getNet();
 		createWakeLock(config.useWakelock);
 		useImmersiveMode(config.useImmersiveMode);
 		if (config.useImmersiveMode && getVersion() >= Build.VERSION_CODES.KITKAT) {
@@ -217,7 +214,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 		Gdx.graphics = this.getGraphics();
-		Gdx.net = this.getNet();
 
 		input.onResume();
 
@@ -255,11 +251,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 	@Override
 	public AndroidInput getInput () {
 		return input;
-	}
-
-	@Override
-	public Net getNet () {
-		return net;
 	}
 
 	@Override

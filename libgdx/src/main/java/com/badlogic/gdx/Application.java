@@ -122,9 +122,6 @@ public interface Application {
 	/** @return the {@link Files} instance */
 	public Files getFiles();
 
-	/** @return the {@link Net} instance */
-	public Net getNet();
-
 	/** Logs a message to the console or logcat */
 	public void log(String tag, String message);
 

@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.graphics.g3d.particles.batches;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -125,16 +126,19 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 	protected BlendingAttribute blendingAttribute;
 	protected DepthTestAttribute depthTestAttribute;
 	Shader shader;
+	private final Graphics graphics;
 
 	/** Create a new BillboardParticleBatch
 	 * @param mode
 	 * @param useGPU Allow to use GPU instead of CPU
 	 * @param capacity Max particle displayed
 	 * @param blendingAttribute Blending attribute used by the batch
-	 * @param depthTestAttribute DepthTest attribute used by the batch */
-	public BillboardParticleBatch (AlignMode mode, boolean useGPU, int capacity, BlendingAttribute blendingAttribute,
-		DepthTestAttribute depthTestAttribute) {
+	 * @param depthTestAttribute DepthTest attribute used by the batch
+	 * @param graphics   */
+	public BillboardParticleBatch(AlignMode mode, boolean useGPU, int capacity, BlendingAttribute blendingAttribute,
+								  DepthTestAttribute depthTestAttribute, Graphics graphics) {
 		super(BillboardControllerRenderData.class);
+		this.graphics = graphics;
 		renderables = new Array<Renderable>();
 		renderablePool = new RenderablePool();
 		this.blendingAttribute = blendingAttribute;
@@ -151,16 +155,16 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 		setAlignMode(mode);
 	}
 
-	public BillboardParticleBatch (AlignMode mode, boolean useGPU, int capacity) {
-		this(mode, useGPU, capacity, null, null);
+	public BillboardParticleBatch(AlignMode mode, boolean useGPU, int capacity, Graphics graphics) {
+		this(mode, useGPU, capacity, null, null, graphics);
 	}
 
-	public BillboardParticleBatch () {
-		this(AlignMode.Screen, false, 100);
+	public BillboardParticleBatch(Graphics graphics) {
+		this(AlignMode.Screen, false, 100, graphics);
 	}
 
-	public BillboardParticleBatch (int capacity) {
-		this(AlignMode.Screen, false, capacity);
+	public BillboardParticleBatch(int capacity, Graphics graphics) {
+		this(AlignMode.Screen, false, capacity, graphics);
 	}
 
 	@Override
@@ -203,7 +207,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 	}
 
 	protected Shader getShader (Renderable renderable) {
-		Shader shader = useGPU ? new ParticleShader(renderable, new ParticleShader.Config(mode)) : new DefaultShader(renderable);
+		Shader shader = useGPU ? new ParticleShader(renderable, new ParticleShader.Config(mode), graphics) : new DefaultShader(renderable);
 		shader.init();
 		return shader;
 	}

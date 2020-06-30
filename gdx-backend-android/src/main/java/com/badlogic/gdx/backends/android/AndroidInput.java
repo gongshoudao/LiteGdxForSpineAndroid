@@ -13,12 +13,6 @@ public interface AndroidInput extends Input, OnTouchListener, OnKeyListener, OnG
 	/** Called when the {@link AndroidApplication} is about to resume */
 	void onResume();
 
-	/** Called when an {@link AndroidDaydream} is about to start */
-	void onDreamingStarted();
-
-	/** Called when an {@link AndroidDaydream} is about to stop */
-	void onDreamingStopped();
-
 	/** Add a custom {@link OnKeyListener} */
 	void addKeyListener(OnKeyListener listener);
 
