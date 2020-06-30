@@ -66,7 +66,7 @@ public class ObjLoader extends ModelLoader<ObjLoader.ObjLoaderParameters> {
 	 * absolutely sure what you are doing. Consult the documentation for more information. */
 	public static boolean logWarning = false;
 
-	public static class ObjLoaderParameters extends ModelParameters {
+	public static class ObjLoaderParameters extends ModelLoader.ModelParameters {
 		public boolean flipV;
 
 		public ObjLoaderParameters () {
