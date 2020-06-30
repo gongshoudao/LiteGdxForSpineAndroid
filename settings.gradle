@@ -1,2 +1,4 @@
 rootProject.name='GdxForAndroid'
 include ':app'
+include ':libgdx'
+include ':gdx-backend-android'
