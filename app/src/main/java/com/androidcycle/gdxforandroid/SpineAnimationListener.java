@@ -1,5 +1,6 @@
 package com.androidcycle.gdxforandroid;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -35,15 +36,15 @@ public class SpineAnimationListener extends ApplicationAdapter {
     AnimationState state;
 
     @Override
-    public void create(Graphics graphics) {
-        super.create(graphics);
-        camera = new OrthographicCamera();
+    public void create(Graphics graphics, Application app) {
+        super.create(graphics, app);
+        camera = new OrthographicCamera(graphics);
         batch = new SpriteBatch(graphics);
         renderer = new SkeletonRenderer();
         renderer.setPremultipliedAlpha(true);
-        debugRenderer = new SkeletonRendererDebug();
+        debugRenderer = new SkeletonRendererDebug(graphics);
 
-        atlas = new TextureAtlas(Gdx.files.internal("spineboy/spineboy-pma.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("spineboy/spineboy-pma.atlas"), app);
         SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
         json.setScale(1f); // Load the skeleton at 60% the size it was in Spine.
         SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("spineboy/spineboy-ess.json"));
@@ -60,8 +61,8 @@ public class SpineAnimationListener extends ApplicationAdapter {
 //            textPaint.setTextAlign(TextPaint.Align.CENTER);
 //            textPaint.setColor(Color.WHITE);
             try {
-                FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir()+"/texture/ic_launcher_round.png");
-                Texture texture = new Texture(fileHandle);
+                FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir() + "/texture/ic_launcher_round.png");
+                Texture texture = new Texture(fileHandle, app);
                 TextureRegion textureRegion = new TextureRegion(texture);
 //                region.setRegion(texture);
                 ((RegionAttachment) attachment).setRegion(textureRegion);

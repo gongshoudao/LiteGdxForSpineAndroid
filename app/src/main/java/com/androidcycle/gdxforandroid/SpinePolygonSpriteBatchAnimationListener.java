@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
@@ -45,15 +46,15 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
     AnimationState state;
 
     @Override
-    public void create(Graphics graphics) {
-        super.create(graphics);
-        camera = new OrthographicCamera();
+    public void create(Graphics graphics, final Application app) {
+        super.create(graphics, app);
+        camera = new OrthographicCamera(graphics);
         batch = new PolygonSpriteBatch(graphics);
         renderer = new SkeletonRenderer();
         renderer.setPremultipliedAlpha(true);
-        debugRenderer = new SkeletonRendererDebug();
+        debugRenderer = new SkeletonRendererDebug(graphics);
 
-        atlas = new TextureAtlas(Gdx.files.internal("raptor/raptor-pma.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("raptor/raptor-pma.atlas"), app);
         SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
         json.setScale(1f); // Load the skeleton at 60% the size it was in Spine.
         SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("raptor/raptor-pro.json"));
@@ -67,7 +68,7 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
             TextureRegion region = ((MeshAttachment) attachment).getRegion();
             try {
                 FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir() + "/texture/ic_launcher_round.png");
-                Texture texture = new Texture(fileHandle);
+                Texture texture = new Texture(fileHandle, app);
                 region.setRegion(texture);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -75,7 +76,7 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         } else if (attachment instanceof RegionAttachment) {
             TextureRegion region = ((RegionAttachment) attachment).getRegion();
             try {
-                Texture textureText = testTextByAndroid();
+                Texture textureText = testTextByAndroid(app);
                 TextureRegion textureRegion = new TextureRegion(textureText);
                 ((RegionAttachment) attachment).setRegion(textureRegion);
             } catch (Exception e) {
@@ -123,14 +124,14 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
                         TextureRegion region = ((MeshAttachment) attachment).getRegion();
                         try {
                             FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir() + "/texture/ic_launcher_round.png");
-                            Texture texture = new Texture(fileHandle);
+                            Texture texture = new Texture(fileHandle, app);
                             region.setRegion(texture);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } else if (attachment instanceof RegionAttachment) {
                         try {
-                            Texture textureText = testTextByAndroid();
+                            Texture textureText = testTextByAndroid(app);
                             TextureRegion textureRegion = new TextureRegion(textureText);
                             ((RegionAttachment) attachment).setRegion(textureRegion);
                         } catch (Exception e) {
@@ -186,7 +187,7 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         atlas.dispose();
     }
 
-    public Texture testTextByAndroid() {
+    public Texture testTextByAndroid(Application app) {
         TextPaint textPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
         textPaint.setTypeface(Typeface.createFromAsset(SpineApp.getInstance().getAssets(), "setofont.ttf"));
         textPaint.setTextSize(48);
@@ -202,6 +203,6 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         byte[] byteArray = stream.toByteArray();
         bitmap.recycle();
         Pixmap pixmap = new Pixmap(byteArray, 0, byteArray.length);
-        return new Texture(pixmap);
+        return new Texture(pixmap, app);
     }
 }

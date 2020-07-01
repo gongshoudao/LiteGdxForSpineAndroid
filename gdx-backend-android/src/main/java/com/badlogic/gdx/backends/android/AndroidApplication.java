@@ -343,7 +343,7 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 	public void postRunnable (Runnable runnable) {
 		synchronized (runnables) {
 			runnables.add(runnable);
-			Gdx.graphics.requestRendering();
+			graphics.requestRendering();
 		}
 	}
 

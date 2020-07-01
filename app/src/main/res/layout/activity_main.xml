@@ -21,10 +21,21 @@
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spine_container" />
+
+    <TextView
+        android:id="@+id/test_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="150dp"
+        android:text="test top text"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spine_container" />
 
     <Button
         android:id="@+id/start_btn"

@@ -287,7 +287,7 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 	public void postRunnable (Runnable runnable) {
 		synchronized (runnables) {
 			runnables.add(runnable);
-			Gdx.graphics.requestRendering();
+			graphics.requestRendering();
 		}
 	}
 
