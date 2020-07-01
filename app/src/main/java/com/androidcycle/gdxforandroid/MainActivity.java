@@ -24,13 +24,17 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         findViewById(R.id.start_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.spine_container, new SpineFragment()).commitAllowingStateLoss();
+                SpineFragment<SpineTwoColorPolygonBatchAnimationListener> fragment = new SpineFragment<>();
+                fragment.setApplicationListenerClass(SpineTwoColorPolygonBatchAnimationListener.class);
+                getSupportFragmentManager().beginTransaction().replace(R.id.spine_container, fragment).commitAllowingStateLoss();
             }
         });
         findViewById(R.id.start_btn_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.spine_container_2, new SpineFragment()).commitAllowingStateLoss();
+                SpineFragment<SpinePolygonSpriteBatchAnimationListener> fragment = new SpineFragment<>();
+                fragment.setApplicationListenerClass(SpinePolygonSpriteBatchAnimationListener.class);
+                getSupportFragmentManager().beginTransaction().replace(R.id.spine_container_2, fragment).commitAllowingStateLoss();
             }
         });
         findViewById(R.id.clear_btn).setOnClickListener(new View.OnClickListener() {

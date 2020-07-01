@@ -405,10 +405,10 @@ public class AndroidGraphics implements Graphics, Renderer {
                         // pause will never go false if onDrawFrame is never called by the GLThread
                         // when entering this method, we MUST enforce continuous rendering
                         Log.e(LOG_TAG, "waiting for pause synchronization took too long; assuming deadlock and killing");
-                        android.os.Process.killProcess(android.os.Process.myPid());
+//                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 } catch (InterruptedException ignored) {
-                    Log.i(LOG_TAG, "waiting for pause synchronization failed!");
+                    Log.e(LOG_TAG, "waiting for pause synchronization failed!");
                 }
             }
         }
@@ -423,7 +423,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 try {
                     synch.wait();
                 } catch (InterruptedException ex) {
-                    Log.w(LOG_TAG, "waiting for destroy synchronization failed!");
+                    Log.e(LOG_TAG, "waiting for destroy synchronization failed!");
                 }
             }
         }

@@ -10,10 +10,18 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 
-public class SpineFragment extends AndroidFragmentApplication {
+public class SpineFragment<T extends ApplicationListener> extends AndroidFragmentApplication {
+
+    private Class<T> mClazz;
+
+    public void setApplicationListenerClass(Class<T> clazz) {
+        mClazz = clazz;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -22,7 +30,15 @@ public class SpineFragment extends AndroidFragmentApplication {
         config.r = 8;
         config.g = 8;
         config.b = 8;
-        View view = initializeForView(new SpineTwoColorPolygonBatchAnimationListener(), config);
+        ApplicationListener listener = null;
+        if (mClazz != null) {
+            try {
+                listener = (ApplicationListener) mClazz.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        View view = initializeForView(listener, config);
         if (view instanceof SurfaceView) {
             SurfaceView surfaceView = (SurfaceView) view;
             SurfaceHolder holder = surfaceView.getHolder();
