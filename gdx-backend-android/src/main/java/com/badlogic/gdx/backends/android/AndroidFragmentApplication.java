@@ -164,7 +164,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
-		Gdx.graphics = this.getGraphics();
 		createWakeLock(config.useWakelock);
 		useImmersiveMode(config.useImmersiveMode);
 		if (config.useImmersiveMode && getVersion() >= Build.VERSION_CODES.KITKAT) {
@@ -213,7 +212,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
-		Gdx.graphics = this.getGraphics();
 
 		input.onResume();
 
@@ -440,7 +438,7 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 
 	@Override
 	public AndroidAudio createAudio (Context context, AndroidApplicationConfiguration config) {
-		return new DefaultAndroidAudio(context, config);
+		return new DefaultAndroidAudio(this, context, config);
 	}
 
 	@Override

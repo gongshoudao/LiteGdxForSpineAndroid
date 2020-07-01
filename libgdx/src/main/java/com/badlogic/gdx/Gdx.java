@@ -16,9 +16,6 @@
 
 package com.badlogic.gdx;
 
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
-
 /**
  * Environment class holding references to the {@link Application}, {@link Graphics}, {@link Audio}, {@link Files} and
  * {@link Input} instances. The references are held in public static fields which allows static access to all sub systems. Do not
@@ -31,17 +28,8 @@ import com.badlogic.gdx.graphics.GL30;
 public class Gdx {
     @Deprecated
     public static Application app;
-    @Deprecated
-    public static Graphics graphics;
     public static Audio audio;
     @Deprecated
     public static Input input;
     public static Files files;
-
-    @Deprecated
-    public static GL20 gl;
-    @Deprecated
-    public static GL20 gl20;
-    @Deprecated
-    public static GL30 gl30;
 }

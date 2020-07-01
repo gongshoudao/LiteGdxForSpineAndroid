@@ -51,6 +51,7 @@ import com.badlogic.gdx.utils.NumberUtils;
  * {@link #drawTwoColor(Texture, float[], int, int, short[], int, int)} are provided to accept float[] vertex data that contains
  * two colors per vertex.
  */
+@Deprecated
 public class TwoColorPolygonBatch implements PolygonBatch {
     static final int VERTEX_SIZE = 2 + 1 + 1 + 2;
     static final int SPRITE_SIZE = 4 * VERTEX_SIZE;

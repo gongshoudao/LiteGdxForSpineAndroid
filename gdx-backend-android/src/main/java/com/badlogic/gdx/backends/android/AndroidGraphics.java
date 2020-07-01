@@ -21,13 +21,13 @@ import android.opengl.GLSurfaceView.EGLConfigChooser;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.android.surfaceview.GLSurfaceView20;
@@ -202,8 +202,6 @@ public class AndroidGraphics implements Graphics, Renderer {
         this.gl20 = gl20;
         if (gl30 == null) {
             gl = gl20;
-            Gdx.gl = gl20;
-            Gdx.gl20 = gl20;
         }
     }
 
@@ -238,9 +236,6 @@ public class AndroidGraphics implements Graphics, Renderer {
             this.gl20 = gl30;
 
             this.gl = gl20;
-            Gdx.gl = gl20;
-            Gdx.gl20 = gl20;
-            Gdx.gl30 = gl30;
         }
     }
 
@@ -287,22 +282,17 @@ public class AndroidGraphics implements Graphics, Renderer {
             gl20 = gl30 = new AndroidGL30();
 
             this.gl = gl30;
-            Gdx.gl = gl30;
-            Gdx.gl20 = gl30;
-            Gdx.gl30 = gl30;
         } else {
             if (gl20 != null) return;
             gl20 = new AndroidGL20();
 
             this.gl = gl20;
-            Gdx.gl = gl20;
-            Gdx.gl20 = gl20;
         }
 
-        Gdx.app.log(LOG_TAG, "OGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
-        Gdx.app.log(LOG_TAG, "OGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
-        Gdx.app.log(LOG_TAG, "OGL version: " + gl.glGetString(GL10.GL_VERSION));
-        Gdx.app.log(LOG_TAG, "OGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
+        Log.i(LOG_TAG, "OGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
+        Log.i(LOG_TAG, "OGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
+        Log.i(LOG_TAG, "OGL version: " + gl.glGetString(GL10.GL_VERSION));
+        Log.i(LOG_TAG, "OGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
     }
 
     @Override
@@ -359,11 +349,11 @@ public class AndroidGraphics implements Graphics, Renderer {
                 getAttrib(egl, display, config, GdxEglConfigChooser.EGL_COVERAGE_SAMPLES_NV, 0));
         boolean coverageSample = getAttrib(egl, display, config, GdxEglConfigChooser.EGL_COVERAGE_SAMPLES_NV, 0) != 0;
 
-        Gdx.app.log(LOG_TAG, "framebuffer: (" + r + ", " + g + ", " + b + ", " + a + ")");
-        Gdx.app.log(LOG_TAG, "depthbuffer: (" + d + ")");
-        Gdx.app.log(LOG_TAG, "stencilbuffer: (" + s + ")");
-        Gdx.app.log(LOG_TAG, "samples: (" + samples + ")");
-        Gdx.app.log(LOG_TAG, "coverage sampling: (" + coverageSample + ")");
+        Log.i(LOG_TAG, "framebuffer: (" + r + ", " + g + ", " + b + ", " + a + ")");
+        Log.i(LOG_TAG, "depthbuffer: (" + d + ")");
+        Log.i(LOG_TAG, "stencilbuffer: (" + s + ")");
+        Log.i(LOG_TAG, "samples: (" + samples + ")");
+        Log.i(LOG_TAG, "coverage sampling: (" + coverageSample + ")");
 
         bufferFormat = new BufferFormat(r, g, b, a, d, s, samples, coverageSample);
     }
@@ -414,11 +404,11 @@ public class AndroidGraphics implements Graphics, Renderer {
                     if (pause) {
                         // pause will never go false if onDrawFrame is never called by the GLThread
                         // when entering this method, we MUST enforce continuous rendering
-                        Gdx.app.error(LOG_TAG, "waiting for pause synchronization took too long; assuming deadlock and killing");
+                        Log.e(LOG_TAG, "waiting for pause synchronization took too long; assuming deadlock and killing");
                         android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 } catch (InterruptedException ignored) {
-                    Gdx.app.log(LOG_TAG, "waiting for pause synchronization failed!");
+                    Log.i(LOG_TAG, "waiting for pause synchronization failed!");
                 }
             }
         }
@@ -433,7 +423,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 try {
                     synch.wait();
                 } catch (InterruptedException ex) {
-                    Gdx.app.log(LOG_TAG, "waiting for destroy synchronization failed!");
+                    Log.w(LOG_TAG, "waiting for destroy synchronization failed!");
                 }
             }
         }
@@ -488,7 +478,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 lifecycleListeners.end();
             }
             app.getApplicationListener().resume();
-            Gdx.app.log(LOG_TAG, "resumed");
+            Log.i(LOG_TAG, "resumed");
         }
 
         if (lrunning) {
@@ -519,7 +509,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 }
             }
             app.getApplicationListener().pause();
-            Gdx.app.log(LOG_TAG, "paused");
+            Log.i(LOG_TAG, "paused");
         }
 
         if (ldestroy) {
@@ -531,7 +521,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 }
             }
             app.getApplicationListener().dispose();
-            Gdx.app.log(LOG_TAG, "destroyed");
+            Log.i(LOG_TAG, "destroyed");
         }
 
         if (time - frameStart > 1000000000) {
@@ -594,9 +584,9 @@ public class AndroidGraphics implements Graphics, Renderer {
     }
 
     protected void logManagedCachesStatus() {
-        Gdx.app.log(LOG_TAG, Mesh.getManagedStatus());
-        Gdx.app.log(LOG_TAG, Texture.getManagedStatus());
-        Gdx.app.log(LOG_TAG, ShaderProgram.getManagedStatus());
+        Log.i(LOG_TAG, Mesh.getManagedStatus());
+        Log.i(LOG_TAG, Texture.getManagedStatus());
+        Log.i(LOG_TAG, ShaderProgram.getManagedStatus());
     }
 
     public View getView() {
@@ -685,7 +675,7 @@ public class AndroidGraphics implements Graphics, Renderer {
                 }
             } // Some Application implementations (such as Live Wallpapers) do not implement Application#getApplicationWindow()
             catch (UnsupportedOperationException e) {
-                Gdx.app.log("AndroidGraphics", "Unable to get safe area insets");
+                Log.w("AndroidGraphics", "Unable to get safe area insets");
             }
         }
     }

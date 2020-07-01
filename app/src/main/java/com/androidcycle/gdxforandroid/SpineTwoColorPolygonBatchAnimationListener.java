@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.TwoColorPolygonBatch;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Event;
@@ -26,6 +25,7 @@ import com.esotericsoftware.spine.Slot;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
+import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
 public class SpineTwoColorPolygonBatchAnimationListener extends ApplicationAdapter {
     OrthographicCamera camera;

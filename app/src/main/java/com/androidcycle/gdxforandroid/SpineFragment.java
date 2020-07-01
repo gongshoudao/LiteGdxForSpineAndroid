@@ -22,7 +22,7 @@ public class SpineFragment extends AndroidFragmentApplication {
         config.r = 8;
         config.g = 8;
         config.b = 8;
-        View view = initializeForView(new SpinePolygonSpriteBatchAnimationListener(), config);
+        View view = initializeForView(new SpineTwoColorPolygonBatchAnimationListener(), config);
         if (view instanceof SurfaceView) {
             SurfaceView surfaceView = (SurfaceView) view;
             SurfaceHolder holder = surfaceView.getHolder();

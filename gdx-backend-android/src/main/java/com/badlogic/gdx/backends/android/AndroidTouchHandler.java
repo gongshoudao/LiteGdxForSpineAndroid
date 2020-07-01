@@ -17,8 +17,10 @@
 package com.badlogic.gdx.backends.android;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.backends.android.DefaultAndroidInput.TouchEvent;
@@ -28,7 +30,7 @@ import com.badlogic.gdx.backends.android.DefaultAndroidInput.TouchEvent;
  * 
  * @author badlogicgames@gmail.com */
 public class AndroidTouchHandler {
-	public void onTouch (MotionEvent event, DefaultAndroidInput input) {
+	public void onTouch(Application app, MotionEvent event, DefaultAndroidInput input) {
 		final int action = event.getAction() & MotionEvent.ACTION_MASK;
 		int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 		int pointerId = event.getPointerId(pointerIndex);
@@ -115,7 +117,7 @@ public class AndroidTouchHandler {
 				break;
 			}
 		}
-		Gdx.app.getGraphics().requestRendering();
+		app.getGraphics().requestRendering();
 	}
 
 	private void logAction (int action, int pointer) {
@@ -136,7 +138,7 @@ public class AndroidTouchHandler {
 			actionStr = "MOVE";
 		else
 			actionStr = "UNKNOWN (" + action + ")";
-		Gdx.app.log("AndroidMultiTouchHandler", "action " + actionStr + ", Android pointer id: " + pointer);
+		Log.i("MultiTouchHandler", "action " + actionStr + ", Android pointer id: " + pointer);
 	}
 
 	private int toGdxButton (int button) {

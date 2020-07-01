@@ -150,7 +150,6 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
-		Gdx.graphics = this.getGraphics();
 
 		if (!isForView) {
 			try {
@@ -257,7 +256,6 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
-		Gdx.graphics = this.getGraphics();
 
 		input.onResume();
 
@@ -487,7 +485,7 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 
 	@Override
 	public AndroidAudio createAudio (Context context, AndroidApplicationConfiguration config) {
-		return new DefaultAndroidAudio(context, config);
+		return new DefaultAndroidAudio(this,context, config);
 	}
 
 	@Override
