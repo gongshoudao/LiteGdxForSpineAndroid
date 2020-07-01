@@ -1,6 +1,7 @@
 
 package com.badlogic.gdx.utils.viewport;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Scaling;
@@ -11,11 +12,11 @@ import com.badlogic.gdx.utils.Scaling;
  * @author Nathan Sweet */
 public class FillViewport extends ScalingViewport {
 	/** Creates a new viewport using a new {@link OrthographicCamera}. */
-	public FillViewport (float worldWidth, float worldHeight) {
-		super(Scaling.fill, worldWidth, worldHeight);
+	public FillViewport(Graphics graphics, float worldWidth, float worldHeight) {
+		super(graphics, Scaling.fill, worldWidth, worldHeight);
 	}
 
-	public FillViewport (float worldWidth, float worldHeight, Camera camera) {
-		super(Scaling.fill, worldWidth, worldHeight, camera);
+	public FillViewport(Graphics graphics, float worldWidth, float worldHeight, Camera camera) {
+		super(graphics, Scaling.fill, worldWidth, worldHeight, camera);
 	}
 }

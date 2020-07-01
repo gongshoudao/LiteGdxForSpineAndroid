@@ -100,9 +100,9 @@ public class PolygonSpriteBatch implements PolygonBatch {
      * The maximum number of triangles rendered in one batch so far.
      **/
     public int maxTrianglesInBatch = 0;
-	private Graphics graphics;
+    private Graphics graphics;
 
-	/**
+    /**
      * Constructs a PolygonSpriteBatch with the default shader, 2000 vertices, and 4000 triangles.
      *
      * @see #PolygonSpriteBatch(Graphics, int, int, ShaderProgram)
@@ -150,15 +150,15 @@ public class PolygonSpriteBatch implements PolygonBatch {
             throw new IllegalArgumentException("Can't have more than 32767 vertices per batch: " + maxVertices);
         if (graphics == null)
             throw new IllegalArgumentException("graphics can not be null");
-		this.graphics = graphics;
-		Mesh.VertexDataType vertexDataType = Mesh.VertexDataType.VertexArray;
+        this.graphics = graphics;
+        Mesh.VertexDataType vertexDataType = Mesh.VertexDataType.VertexArray;
         if (graphics.isGL30Available()) {
             vertexDataType = VertexDataType.VertexBufferObjectWithVAO;
         }
-        mesh = new Mesh(vertexDataType, false, maxVertices, maxTriangles * 3,
+        mesh = new Mesh(graphics, vertexDataType, false, maxVertices,
+                maxTriangles * 3,
                 new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
-                new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-                new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+                new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE), new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
 
         vertices = new float[maxVertices * VERTEX_SIZE];
         triangles = new short[maxTriangles * 3];
@@ -178,7 +178,7 @@ public class PolygonSpriteBatch implements PolygonBatch {
             throw new IllegalStateException("PolygonSpriteBatch.end must be called before begin.");
         renderCalls = 0;
 
-		graphics.getGL20().glDepthMask(false);
+        graphics.getGL20().glDepthMask(false);
         if (customShader != null)
             customShader.bind();
         else
@@ -1250,11 +1250,11 @@ public class PolygonSpriteBatch implements PolygonBatch {
         mesh.setVertices(vertices, 0, vertexIndex);
         mesh.setIndices(triangles, 0, trianglesInBatch);
         if (blendingDisabled) {
-			graphics.getGL20().glDisable(GL20.GL_BLEND);
+            graphics.getGL20().glDisable(GL20.GL_BLEND);
         } else {
-			graphics.getGL20().glEnable(GL20.GL_BLEND);
+            graphics.getGL20().glEnable(GL20.GL_BLEND);
             if (blendSrcFunc != -1)
-				graphics.getGL20().glBlendFuncSeparate(blendSrcFunc, blendDstFunc, blendSrcFuncAlpha, blendDstFuncAlpha);
+                graphics.getGL20().glBlendFuncSeparate(blendSrcFunc, blendDstFunc, blendSrcFuncAlpha, blendDstFuncAlpha);
         }
 
         mesh.render(customShader != null ? customShader : shader, GL20.GL_TRIANGLES, 0, trianglesInBatch);

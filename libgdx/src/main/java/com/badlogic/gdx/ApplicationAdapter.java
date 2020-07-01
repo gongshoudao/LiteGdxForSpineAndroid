@@ -21,7 +21,7 @@ package com.badlogic.gdx;
 public abstract class ApplicationAdapter implements ApplicationListener {
 	protected Graphics graphics;
 	@Override
-	public void create(Graphics graphics) {
+	public void create(Graphics graphics, Application app) {
 		this.graphics = graphics;
 	}
 

@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.graphics;
 
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
@@ -26,18 +27,21 @@ public class PerspectiveCamera extends Camera {
 	/** the field of view of the height, in degrees **/
 	public float fieldOfView = 67;
 
-	public PerspectiveCamera () {
-	}
+	public PerspectiveCamera(Graphics graphics) {
+        super(graphics);
+    }
 
 	/** Constructs a new {@link PerspectiveCamera} with the given field of view and viewport size. The aspect ratio is derived from
 	 * the viewport size.
-	 * 
+	 *
+	 * @param graphics
 	 * @param fieldOfViewY the field of view of the height, in degrees, the field of view for the width will be calculated
 	 *           according to the aspect ratio.
 	 * @param viewportWidth the viewport width
-	 * @param viewportHeight the viewport height */
-	public PerspectiveCamera (float fieldOfViewY, float viewportWidth, float viewportHeight) {
-		this.fieldOfView = fieldOfViewY;
+	 * @param viewportHeight the viewport height   */
+	public PerspectiveCamera(Graphics graphics, float fieldOfViewY, float viewportWidth, float viewportHeight) {
+        super(graphics);
+        this.fieldOfView = fieldOfViewY;
 		this.viewportWidth = viewportWidth;
 		this.viewportHeight = viewportHeight;
 		update();

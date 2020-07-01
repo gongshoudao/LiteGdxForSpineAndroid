@@ -123,10 +123,10 @@ public class SpriteBatch implements Batch {
         gl = graphics.getGL20();
         VertexDataType vertexDataType = graphics.isGL30Available() ? VertexDataType.VertexBufferObjectWithVAO : defaultVertexDataType;
 
-        mesh = new Mesh(vertexDataType, false, size * 4, size * 6,
+        mesh = new Mesh(graphics, vertexDataType, false, size * 4,
+                size * 6,
                 new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
-                new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-                new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+                new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE), new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
 
         projectionMatrix.setToOrtho2D(0, 0, graphics.getWidth(), graphics.getHeight());
 

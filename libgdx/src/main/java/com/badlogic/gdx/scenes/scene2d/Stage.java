@@ -89,7 +89,7 @@ public class Stage extends InputAdapter implements Disposable {
      * @param graphics
      */
     public Stage(Graphics graphics) {
-        this(graphics, new ScalingViewport(Scaling.stretch, graphics.getWidth(), graphics.getHeight(), new OrthographicCamera()), new SpriteBatch(graphics));
+        this(graphics, new ScalingViewport(graphics, Scaling.stretch, graphics.getWidth(), graphics.getHeight(), new OrthographicCamera(graphics)), new SpriteBatch(graphics));
         ownsBatch = true;
     }
 

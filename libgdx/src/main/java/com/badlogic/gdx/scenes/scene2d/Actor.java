@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
@@ -984,7 +983,7 @@ public class Actor {
         tableBounds.height = height;
         Rectangle scissorBounds = Pools.obtain(Rectangle.class);
         stage.calculateScissors(tableBounds, scissorBounds);
-        if (ScissorStack.pushScissors(graphics.getGL20(), scissorBounds)) return true;
+        if (ScissorStack.pushScissors(graphics, scissorBounds)) return true;
         Pools.free(scissorBounds);
         return false;
     }
@@ -993,7 +992,7 @@ public class Actor {
      * Ends clipping begun by {@link #clipBegin(float, float, float, float)}.
      */
     public void clipEnd() {
-        Pools.free(ScissorStack.popScissors(graphics.getGL20()));
+        Pools.free(ScissorStack.popScissors(graphics));
     }
 
     /**

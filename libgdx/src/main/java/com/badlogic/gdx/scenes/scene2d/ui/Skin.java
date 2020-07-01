@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -81,24 +82,24 @@ public class Skin implements Disposable {
      * extension exists, it is loaded as a {@link TextureAtlas} and the texture regions added to the skin. The atlas is
      * automatically disposed when the skin is disposed.
      */
-    public Skin(FileHandle skinFile) {
+    public Skin(FileHandle skinFile, Application app) {
         FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
         if (atlasFile.exists()) {
-            atlas = new TextureAtlas(atlasFile);
+            atlas = new TextureAtlas(atlasFile, app);
             addRegions(atlas);
         }
 
-        load(skinFile);
+        load(skinFile, app);
     }
 
     /**
      * Creates a skin containing the resources in the specified skin JSON file and the texture regions from the specified atlas.
      * The atlas is automatically disposed when the skin is disposed.
      */
-    public Skin(FileHandle skinFile, TextureAtlas atlas) {
+    public Skin(FileHandle skinFile, TextureAtlas atlas, Application app) {
         this.atlas = atlas;
         addRegions(atlas);
-        load(skinFile);
+        load(skinFile, app);
     }
 
     /**
@@ -113,9 +114,9 @@ public class Skin implements Disposable {
     /**
      * Adds all resources in the specified skin JSON file.
      */
-    public void load(FileHandle skinFile) {
+    public void load(FileHandle skinFile, Application app) {
         try {
-            getJsonLoader(skinFile).fromJson(Skin.class, skinFile);
+            getJsonLoader(skinFile, app).fromJson(Skin.class, skinFile);
         } catch (SerializationException ex) {
             throw new SerializationException("Error reading file: " + skinFile, ex);
         }
@@ -525,7 +526,7 @@ public class Skin implements Disposable {
         }
     }
 
-    protected Json getJsonLoader(final FileHandle skinFile) {
+    protected Json getJsonLoader(final FileHandle skinFile, final Application app) {
         final Skin skin = this;
 
         final Json json = new Json() {
@@ -616,17 +617,17 @@ public class Skin implements Disposable {
                     BitmapFont font;
                     Array<TextureRegion> regions = skin.getRegions(regionName);
                     if (regions != null)
-                        font = new BitmapFont(new BitmapFontData(fontFile, flip), regions, true);
+                        font = new BitmapFont(new BitmapFontData(fontFile, flip), regions, true, app);
                     else {
                         TextureRegion region = skin.optional(regionName, TextureRegion.class);
                         if (region != null)
-                            font = new BitmapFont(fontFile, region, flip);
+                            font = new BitmapFont(fontFile, region, flip, app);
                         else {
                             FileHandle imageFile = fontFile.parent().child(regionName + ".png");
                             if (imageFile.exists())
-                                font = new BitmapFont(fontFile, imageFile, flip);
+                                font = new BitmapFont(fontFile, imageFile, flip, app);
                             else
-                                font = new BitmapFont(fontFile, flip);
+                                font = new BitmapFont(fontFile, flip, app);
                         }
                     }
                     font.getData().markupEnabled = markupEnabled;
@@ -675,7 +676,7 @@ public class Skin implements Disposable {
 
     /**
      * Returns a map of {@link Json#addClassTag(String, Class) class tags} that will be used when loading skin JSON. The map can
-     * be modified before calling {@link #load(FileHandle)}. By default the map is populated with the simple class names of libGDX
+     * be modified before calling {@link #load(FileHandle, Application)}. By default the map is populated with the simple class names of libGDX
      * classes commonly used in skins.
      */
     public ObjectMap<String, Class> getJsonClassTags() {

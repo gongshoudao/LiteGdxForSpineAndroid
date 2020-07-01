@@ -35,12 +35,13 @@ public interface ApplicationListener {
     /**
      * Called when the {@link Application} is first created.
      * @param graphics
+     * @param app
      */
-    public void create(Graphics graphics);
+    public void create(Graphics graphics, Application app);
 
     /**
      * Called when the {@link Application} is resized. This can happen at any point during a non-paused state but will never happen
-     * before a call to {@link #create(Graphics)}.
+     * before a call to {@link #create(Graphics, Application)}.
      *
      * @param width  the new width in pixels
      * @param height the new height in pixels

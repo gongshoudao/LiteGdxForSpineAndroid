@@ -16,7 +16,7 @@
 
 package com.badlogic.gdx.graphics;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -28,16 +28,19 @@ public class OrthographicCamera extends Camera {
 	/** the zoom of the camera **/
 	public float zoom = 1;
 
-	public OrthographicCamera () {
+	public OrthographicCamera(Graphics graphics) {
+		super(graphics);
 		this.near = 0;
 	}
 
 	/** Constructs a new OrthographicCamera, using the given viewport width and height. For pixel perfect 2D rendering just supply
 	 * the screen size, for other unit scales (e.g. meters for box2d) proceed accordingly. The camera will show the region
 	 * [-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2]
+	 * @param graphics
 	 * @param viewportWidth the viewport width
-	 * @param viewportHeight the viewport height */
-	public OrthographicCamera (float viewportWidth, float viewportHeight) {
+	 * @param viewportHeight the viewport height  */
+	public OrthographicCamera(Graphics graphics, float viewportWidth, float viewportHeight) {
+		super(graphics);
 		this.viewportWidth = viewportWidth;
 		this.viewportHeight = viewportHeight;
 		this.near = 0;
@@ -70,7 +73,7 @@ public class OrthographicCamera extends Camera {
 	 * (Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), with the y-axis pointing up or down.
 	 * @param yDown whether y should be pointing down */
 	public void setToOrtho (boolean yDown) {
-		setToOrtho(yDown, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		setToOrtho(yDown, graphics.getWidth(), graphics.getHeight());
 	}
 
 	/** Sets this camera to an orthographic projection, centered at (viewportWidth/2, viewportHeight/2), with the y-axis pointing up

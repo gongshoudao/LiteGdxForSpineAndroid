@@ -16,7 +16,7 @@
 
 package com.badlogic.gdx.assets.loaders.resolvers;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -71,19 +71,22 @@ public class ResolutionFileResolver implements FileHandleResolver {
 
 	protected final FileHandleResolver baseResolver;
 	protected final Resolution[] descriptors;
+	protected final Graphics graphics;
 
 	/** Creates a {@code ResolutionFileResolver} based on a given {@link FileHandleResolver} and a list of {@link Resolution}s.
+	 * @param graphics
 	 * @param baseResolver The {@link FileHandleResolver} that will ultimately used to resolve the file.
-	 * @param descriptors A list of {@link Resolution}s. At least one has to be supplied. */
-	public ResolutionFileResolver (FileHandleResolver baseResolver, Resolution... descriptors) {
+	 * @param descriptors A list of {@link Resolution}s. At least one has to be supplied.  */
+	public ResolutionFileResolver(Graphics graphics, FileHandleResolver baseResolver, Resolution... descriptors) {
 		if (descriptors.length == 0) throw new IllegalArgumentException("At least one Resolution needs to be supplied.");
 		this.baseResolver = baseResolver;
 		this.descriptors = descriptors;
+		this.graphics = graphics;
 	}
 
 	@Override
 	public FileHandle resolve (String fileName) {
-		Resolution bestResolution = choose(descriptors);
+		Resolution bestResolution = choose(graphics,descriptors);
 		FileHandle originalHandle = new FileHandle(fileName);
 		FileHandle handle = baseResolver.resolve(resolve(originalHandle, bestResolution.folder));
 		if (!handle.exists()) handle = baseResolver.resolve(fileName);
@@ -99,8 +102,8 @@ public class ResolutionFileResolver implements FileHandleResolver {
 		return parentString + suffix + "/" + originalHandle.name();
 	}
 
-	static public Resolution choose (Resolution... descriptors) {
-		int w = Gdx.graphics.getWidth(), h = Gdx.graphics.getHeight();
+	static public Resolution choose(Graphics graphics, Resolution... descriptors) {
+		int w = graphics.getWidth(), h = graphics.getHeight();
 
 		// Prefer the shortest side.
 		Resolution best = descriptors[0];

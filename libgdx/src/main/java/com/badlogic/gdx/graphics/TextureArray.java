@@ -17,11 +17,7 @@
 package com.badlogic.gdx.graphics;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -30,131 +26,114 @@ import java.util.Map;
 
 /**
  * Open GLES wrapper for TextureArray
- * @author Tomski */
+ *
+ * @author Tomski
+ */
 public class TextureArray extends GLTexture {
 
-	final static Map<Application, Array<TextureArray>> managedTextureArrays = new HashMap<Application, Array<TextureArray>>();
+    final static Map<Application, Array<TextureArray>> managedTextureArrays = new HashMap<Application, Array<TextureArray>>();
 
-	private TextureArrayData data;
+    private TextureArrayData data;
+    private Application mApp;
+    private GL20 gl20;
+    private GL30 gl30;
 
-	public TextureArray (String... internalPaths) {
-		this(getInternalHandles(internalPaths));
-	}
+    public TextureArray(Application app, FileHandle... files) {
+        this(app, false, files);
+    }
 
-	public TextureArray (FileHandle... files) {
-		this(false, files);
-	}
+    public TextureArray(Application app, boolean useMipMaps, FileHandle... files) {
+        this(app, useMipMaps, Pixmap.Format.RGBA8888, files);
+    }
 
-	public TextureArray (boolean useMipMaps, FileHandle... files) {
-		this(useMipMaps, Pixmap.Format.RGBA8888, files);
-	}
+    public TextureArray(Application app, boolean useMipMaps, Pixmap.Format format, FileHandle... files) {
+        this(app, TextureArrayData.Factory.loadFromFiles(app.getGraphics().getGL30(), format, useMipMaps, files));
+    }
 
-	public TextureArray (boolean useMipMaps, Pixmap.Format format, FileHandle... files) {
-		this(TextureArrayData.Factory.loadFromFiles(format, useMipMaps, files));
-	}
+    public TextureArray(Application app, TextureArrayData data) {
+        super(app.getGraphics(), GL30.GL_TEXTURE_2D_ARRAY, app.getGraphics().getGL20().glGenTexture());
+        mApp = app;
+        gl20 = app.getGraphics().getGL20();
+        gl30 = app.getGraphics().getGL30();
+        if (app.getGraphics().isGL30Available()) {
+            throw new GdxRuntimeException("TextureArray requires a device running with GLES 3.0 compatibilty");
+        }
 
-	public TextureArray (TextureArrayData data) {
-		super(GL30.GL_TEXTURE_2D_ARRAY, Gdx.gl.glGenTexture());
+        load(data);
 
-		if (Gdx.gl30 == null) {
-			throw new GdxRuntimeException("TextureArray requires a device running with GLES 3.0 compatibilty");
-		}
+        if (data.isManaged()) addManagedTexture(app, this);
+    }
 
-		load(data);
+    private void load(TextureArrayData data) {
+        if (this.data != null && data.isManaged() != this.data.isManaged())
+            throw new GdxRuntimeException("New data must have the same managed status as the old data");
+        this.data = data;
 
-		if (data.isManaged()) addManagedTexture(Gdx.app, this);
-	}
+        bind();
+        gl30.glTexImage3D(GL30.GL_TEXTURE_2D_ARRAY, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getDepth(), 0, data.getInternalFormat(), data.getGLType(), null);
 
-	private static FileHandle[] getInternalHandles (String... internalPaths) {
-		FileHandle[] handles = new FileHandle[internalPaths.length];
-		for (int i = 0; i < internalPaths.length; i++) {
-			handles[i] = Gdx.files.internal(internalPaths[i]);
-		}
-		return handles;
-	}
+        if (!data.isPrepared()) data.prepare();
 
-	private void load (TextureArrayData data) {
-		if (this.data != null && data.isManaged() != this.data.isManaged())
-			throw new GdxRuntimeException("New data must have the same managed status as the old data");
-		this.data = data;
+        data.consumeTextureArrayData();
 
-		bind();
-		Gdx.gl30.glTexImage3D(GL30.GL_TEXTURE_2D_ARRAY, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getDepth(), 0, data.getInternalFormat(), data.getGLType(), null);
+        setFilter(minFilter, magFilter);
+        setWrap(uWrap, vWrap);
+        gl20.glBindTexture(glTarget, 0);
+    }
 
-		if (!data.isPrepared()) data.prepare();
+    @Override
+    public int getWidth() {
+        return data.getWidth();
+    }
 
-		data.consumeTextureArrayData();
+    @Override
+    public int getHeight() {
+        return data.getHeight();
+    }
 
-		setFilter(minFilter, magFilter);
-		setWrap(uWrap, vWrap);
-		Gdx.gl.glBindTexture(glTarget, 0);
-	}
+    @Override
+    public int getDepth() {
+        return data.getDepth();
+    }
 
-	@Override
-	public int getWidth () {
-		return data.getWidth();
-	}
+    @Override
+    public boolean isManaged() {
+        return data.isManaged();
+    }
 
-	@Override
-	public int getHeight () {
-		return data.getHeight();
-	}
+    @Override
+    protected void reload() {
+        if (!isManaged())
+            throw new GdxRuntimeException("Tried to reload an unmanaged TextureArray");
+        glHandle = gl20.glGenTexture();
+        load(data);
+    }
 
-	@Override
-	public int getDepth () {
-		return data.getDepth();
-	}
-
-	@Override
-	public boolean isManaged () {
-		return data.isManaged();
-	}
-
-	@Override
-	protected void reload () {
-		if (!isManaged()) throw new GdxRuntimeException("Tried to reload an unmanaged TextureArray");
-		glHandle = Gdx.gl.glGenTexture();
-		load(data);
-	}
-
-	private static void addManagedTexture (Application app, TextureArray texture) {
-		Array<TextureArray> managedTextureArray = managedTextureArrays.get(app);
-		if (managedTextureArray == null) managedTextureArray = new Array<TextureArray>();
-		managedTextureArray.add(texture);
-		managedTextureArrays.put(app, managedTextureArray);
-	}
+    private static void addManagedTexture(Application app, TextureArray texture) {
+        Array<TextureArray> managedTextureArray = managedTextureArrays.get(app);
+        if (managedTextureArray == null) managedTextureArray = new Array<TextureArray>();
+        managedTextureArray.add(texture);
+        managedTextureArrays.put(app, managedTextureArray);
+    }
 
 
-	/** Clears all managed TextureArrays. This is an internal method. Do not use it! */
-	public static void clearAllTextureArrays (Application app) {
-		managedTextureArrays.remove(app);
-	}
+    /**
+     * Clears all managed TextureArrays. This is an internal method. Do not use it!
+     */
+    public static void clearAllTextureArrays(Application app) {
+        managedTextureArrays.remove(app);
+    }
 
-	/** Invalidate all managed TextureArrays. This is an internal method. Do not use it! */
-	public static void invalidateAllTextureArrays (Application app) {
-		Array<TextureArray> managedTextureArray = managedTextureArrays.get(app);
-		if (managedTextureArray == null) return;
+    /**
+     * Invalidate all managed TextureArrays. This is an internal method. Do not use it!
+     */
+    public static void invalidateAllTextureArrays(Application app) {
+        Array<TextureArray> managedTextureArray = managedTextureArrays.get(app);
+        if (managedTextureArray == null) return;
 
-		for (int i = 0; i < managedTextureArray.size; i++) {
-			TextureArray textureArray = managedTextureArray.get(i);
-			textureArray.reload();
-		}
-	}
-
-	public static String getManagedStatus () {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Managed TextureArrays/app: { ");
-		for (Application app : managedTextureArrays.keySet()) {
-			builder.append(managedTextureArrays.get(app).size);
-			builder.append(" ");
-		}
-		builder.append("}");
-		return builder.toString();
-	}
-
-	/** @return the number of managed TextureArrays currently loaded */
-	public static int getNumManagedTextureArrays () {
-		return managedTextureArrays.get(Gdx.app).size;
-	}
-
+        for (int i = 0; i < managedTextureArray.size; i++) {
+            TextureArray textureArray = managedTextureArray.get(i);
+            textureArray.reload();
+        }
+    }
 }

@@ -102,11 +102,11 @@ public class TwoColorPolygonBatch implements PolygonBatch {
         this.graphics = graphics;
         VertexDataType vertexDataType = VertexDataType.VertexArray;
         if (graphics.isGL30Available()) vertexDataType = VertexDataType.VertexBufferObjectWithVAO;
-        mesh = new Mesh(vertexDataType, false, maxVertices, maxTriangles * 3, //
+        mesh = new Mesh(graphics, vertexDataType, false, maxVertices,  //
+                maxTriangles * 3, //
                 new VertexAttribute(Usage.Position, 2, "a_position"), //
-                new VertexAttribute(Usage.ColorPacked, 4, "a_light"), //
-                new VertexAttribute(Usage.ColorPacked, 4, "a_dark"), // Dark alpha is unused, but colors are packed as 4 byte floats.
-                new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
+                new VertexAttribute(Usage.ColorPacked, 4, "a_light"), // Dark alpha is unused, but colors are packed as 4 byte floats.
+                new VertexAttribute(Usage.ColorPacked, 4, "a_dark"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
 
         vertices = new float[maxVertices * 6];
         triangles = new short[maxTriangles * 3];

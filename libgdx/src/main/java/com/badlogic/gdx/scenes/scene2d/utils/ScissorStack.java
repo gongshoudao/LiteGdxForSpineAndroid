@@ -49,12 +49,12 @@ public class ScissorStack {
      * @return true if the scissors were pushed. false if the scissor area was zero, in this case the scissors were not pushed and
      * no drawing should occur.
      */
-    public static boolean pushScissors(GL20 gl, Rectangle scissor) {
+    public static boolean pushScissors(Graphics graphics, Rectangle scissor) {
         fix(scissor);
 
         if (scissors.size == 0) {
             if (scissor.width < 1 || scissor.height < 1) return false;
-            gl.glEnable(GL20.GL_SCISSOR_TEST);
+            graphics.getGL20().glEnable(GL20.GL_SCISSOR_TEST);
         } else {
             // merge scissors
             Rectangle parent = scissors.get(scissors.size - 1);
@@ -72,7 +72,7 @@ public class ScissorStack {
             scissor.height = Math.max(1, maxY - minY);
         }
         scissors.add(scissor);
-        HdpiUtils.glScissor((int) scissor.x, (int) scissor.y, (int) scissor.width, (int) scissor.height);
+        HdpiUtils.glScissor(graphics, (int) scissor.x, (int) scissor.y, (int) scissor.width, (int) scissor.height);
         return true;
     }
 
@@ -82,13 +82,13 @@ public class ScissorStack {
      * <p>
      * Any drawing should be flushed before popping scissors.
      */
-    public static Rectangle popScissors(GL20 gl) {
+    public static Rectangle popScissors(Graphics graphics) {
         Rectangle old = scissors.pop();
         if (scissors.size == 0)
-            gl.glDisable(GL20.GL_SCISSOR_TEST);
+            graphics.getGL20().glDisable(GL20.GL_SCISSOR_TEST);
         else {
             Rectangle scissor = scissors.peek();
-            HdpiUtils.glScissor((int) scissor.x, (int) scissor.y, (int) scissor.width, (int) scissor.height);
+            HdpiUtils.glScissor(graphics, (int) scissor.x, (int) scissor.y, (int) scissor.width, (int) scissor.height);
         }
         return old;
     }

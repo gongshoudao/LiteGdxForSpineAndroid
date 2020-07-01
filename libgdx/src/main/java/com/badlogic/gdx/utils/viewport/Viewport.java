@@ -17,7 +17,7 @@
 package com.badlogic.gdx.utils.viewport;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
@@ -32,11 +32,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
  * @author Daniel Holderbaum
  * @author Nathan Sweet */
 public abstract class Viewport {
+	protected final Graphics graphics;
+
 	private Camera camera;
 	private float worldWidth, worldHeight;
 	private int screenX, screenY, screenWidth, screenHeight;
-
 	private final Vector3 tmp = new Vector3();
+
+	public Viewport(Graphics graphics) {
+		this.graphics = graphics;
+	}
 
 	/** Calls {@link #apply(boolean)} with false. */
 	public void apply () {
@@ -46,7 +51,7 @@ public abstract class Viewport {
 	/** Applies the viewport to the camera and sets the glViewport.
 	 * @param centerCamera If true, the camera position is set to the center of the world. */
 	public void apply (boolean centerCamera) {
-		HdpiUtils.glViewport(screenX, screenY, screenWidth, screenHeight);
+		HdpiUtils.glViewport(graphics,screenX, screenY, screenWidth, screenHeight);
 		camera.viewportWidth = worldWidth;
 		camera.viewportHeight = worldHeight;
 		if (centerCamera) camera.position.set(worldWidth / 2, worldHeight / 2, 0);
@@ -118,7 +123,7 @@ public abstract class Viewport {
 		tmp.set(worldCoords.x, worldCoords.y, 0);
 		tmp.mul(transformMatrix);
 		camera.project(tmp, screenX, screenY, screenWidth, screenHeight);
-		tmp.y = Gdx.graphics.getHeight() - tmp.y;
+		tmp.y = graphics.getHeight() - tmp.y;
 		worldCoords.x = tmp.x;
 		worldCoords.y = tmp.y;
 		return worldCoords;
@@ -224,7 +229,7 @@ public abstract class Viewport {
 
 	/** Returns the right gutter (black bar) width in screen coordinates. */
 	public int getRightGutterWidth () {
-		return Gdx.graphics.getWidth() - (screenX + screenWidth);
+		return graphics.getWidth() - (screenX + screenWidth);
 	}
 
 	/** Returns the bottom gutter (black bar) height in screen coordinates. */
@@ -239,6 +244,6 @@ public abstract class Viewport {
 
 	/** Returns the top gutter (black bar) height in screen coordinates. */
 	public int getTopGutterHeight () {
-		return Gdx.graphics.getHeight() - (screenY + screenHeight);
+		return graphics.getHeight() - (screenY + screenHeight);
 	}
 }

@@ -16,7 +16,6 @@
 
 package com.badlogic.gdx.graphics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -60,6 +59,12 @@ public abstract class Camera {
 
 	private final Vector3 tmpVec = new Vector3();
 	private final Ray ray = new Ray(new Vector3(), new Vector3());
+
+	protected final Graphics graphics;
+
+	protected Camera(Graphics graphics) {
+		this.graphics = graphics;
+	}
 
 	/** Recalculates the projection and view matrix of this camera and the {@link Frustum} planes. Use this after you've manipulated
 	 * any of the attributes of the camera. */
@@ -194,7 +199,7 @@ public abstract class Camera {
 	public Vector3 unproject (Vector3 screenCoords, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
 		float x = screenCoords.x, y = screenCoords.y;
 		x = x - viewportX;
-		y = Gdx.graphics.getHeight() - y;
+		y = graphics.getHeight() - y;
 		y = y - viewportY;
 		screenCoords.x = (2 * x) / viewportWidth - 1;
 		screenCoords.y = (2 * y) / viewportHeight - 1;
@@ -211,7 +216,7 @@ public abstract class Camera {
 	 * @param screenCoords the point in screen coordinates
 	 * @return the mutated and unprojected screenCoords {@link Vector3} */
 	public Vector3 unproject (Vector3 screenCoords) {
-		unproject(screenCoords, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		unproject(screenCoords, 0, 0, graphics.getWidth(), graphics.getHeight());
 		return screenCoords;
 	}
 
@@ -221,7 +226,7 @@ public abstract class Camera {
 	 * useable in conjunction with {@link Batch} and similar classes.
 	 * @return the mutated and projected worldCoords {@link Vector3} */
 	public Vector3 project (Vector3 worldCoords) {
-		project(worldCoords, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		project(worldCoords, 0, 0, graphics.getWidth(), graphics.getHeight());
 		return worldCoords;
 	}
 
@@ -265,6 +270,6 @@ public abstract class Camera {
 	 * pointing to the right. The returned instance is not a new instance but an internal member only accessible via this function.
 	 * @return the picking Ray. */
 	public Ray getPickRay (float screenX, float screenY) {
-		return getPickRay(screenX, screenY, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		return getPickRay(screenX, screenY, 0, 0, graphics.getWidth(), graphics.getHeight());
 	}
 }
