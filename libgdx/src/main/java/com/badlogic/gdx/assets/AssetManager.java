@@ -108,7 +108,7 @@ public class AssetManager implements Disposable {
             setLoader(Texture.class, new TextureLoader(resolver, app));
             setLoader(Skin.class, new SkinLoader(resolver, app));
             setLoader(ParticleEffect.class, new ParticleEffectLoader(resolver, app));
-            setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver));
+            setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver, app));
         }
         executor = new AsyncExecutor(1, "AssetManager");
     }

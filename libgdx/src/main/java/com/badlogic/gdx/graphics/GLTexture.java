@@ -336,11 +336,11 @@ public abstract class GLTexture implements Disposable {
             disposePixmap = true;
         }
 
-		graphics.getGL20().glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
+        graphics.getGL20().glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
         if (data.useMipMaps()) {
-            MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
+            MipMapGenerator.generateMipMap(graphics, target, pixmap, pixmap.getWidth(), pixmap.getHeight());
         } else {
-			graphics.getGL20().glTexImage2D(target, miplevel, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
+            graphics.getGL20().glTexImage2D(target, miplevel, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
                     pixmap.getGLFormat(), pixmap.getGLType(), pixmap.getPixels());
         }
         if (disposePixmap) pixmap.dispose();

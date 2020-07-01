@@ -148,7 +148,7 @@ public class Mesh implements Disposable {
      **/
     public Mesh(Graphics graphics, boolean staticVertices, boolean staticIndices, int maxVertices, int maxIndices, VertexAttributes attributes) {
         vertices = makeVertexBuffer(staticVertices, maxVertices, attributes);
-        indices = new IndexBufferObject(graphics,staticIndices, maxIndices);
+        indices = new IndexBufferObject(graphics, staticIndices, maxIndices);
         isVertexArray = false;
         this.graphics = graphics;
 
@@ -157,9 +157,9 @@ public class Mesh implements Disposable {
 
     private VertexData makeVertexBuffer(boolean isStatic, int maxVertices, VertexAttributes vertexAttributes) {
         if (graphics.isGL30Available()) {
-            return new VertexBufferObjectWithVAO(isStatic, maxVertices, vertexAttributes);
+            return new VertexBufferObjectWithVAO(graphics, isStatic, maxVertices, vertexAttributes);
         } else {
-            return new VertexBufferObject(isStatic, maxVertices, vertexAttributes);
+            return new VertexBufferObject(graphics, isStatic, maxVertices, vertexAttributes);
         }
     }
 
@@ -191,18 +191,18 @@ public class Mesh implements Disposable {
         this.graphics = graphics;
         switch (type) {
             case VertexBufferObject:
-                vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
+                vertices = new VertexBufferObject(graphics, isStatic, maxVertices, attributes);
                 indices = new IndexBufferObject(graphics, isStatic, maxIndices);
                 isVertexArray = false;
                 break;
             case VertexBufferObjectSubData:
-                vertices = new VertexBufferObjectSubData(isStatic, maxVertices, attributes);
-                indices = new IndexBufferObjectSubData(isStatic, maxIndices);
+                vertices = new VertexBufferObjectSubData(graphics, isStatic, maxVertices, attributes);
+                indices = new IndexBufferObjectSubData(graphics, isStatic, maxIndices);
                 isVertexArray = false;
                 break;
             case VertexBufferObjectWithVAO:
-                vertices = new VertexBufferObjectWithVAO(isStatic, maxVertices, attributes);
-                indices = new IndexBufferObjectSubData(isStatic, maxIndices);
+                vertices = new VertexBufferObjectWithVAO(graphics, isStatic, maxVertices, attributes);
+                indices = new IndexBufferObjectSubData(graphics, isStatic, maxIndices);
                 isVertexArray = false;
                 break;
             case VertexArray:
@@ -219,7 +219,7 @@ public class Mesh implements Disposable {
     public Mesh enableInstancedRendering(boolean isStatic, int maxInstances, VertexAttribute... attributes) {
         if (!isInstanced) {
             isInstanced = true;
-            instances = new InstanceBufferObject(isStatic, maxInstances, attributes);
+            instances = new InstanceBufferObject(graphics, isStatic, maxInstances, attributes);
         } else {
             throw new GdxRuntimeException("Trying to enable InstancedRendering on same Mesh instance twice."
                     + " Use disableInstancedRendering to clean up old InstanceData first");

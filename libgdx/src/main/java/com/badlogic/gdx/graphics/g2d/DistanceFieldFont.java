@@ -23,6 +23,7 @@
 package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -31,7 +32,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Renders bitmap fonts using distance field textures, see the <a
  * href="https://github.com/libgdx/libgdx/wiki/Distance-field-fonts">Distance Field Fonts wiki article</a> for usage. Initialize
- * the SpriteBatch with the {@link #createDistanceFieldShader()} shader.
+ * the SpriteBatch with the {@link #createDistanceFieldShader(Graphics)} shader.
  * <p>
  * Attention: The batch is flushed before and after each string is rendered.
  *
@@ -105,7 +106,7 @@ public class DistanceFieldFont extends BitmapFont {
      * Returns a new instance of the distance field shader, see https://github.com/libgdx/libgdx/wiki/Distance-field-fonts if the
      * u_smoothing uniform > 0.0. Otherwise the same code as the default SpriteBatch shader is used.
      */
-    static public ShaderProgram createDistanceFieldShader() {
+    static public ShaderProgram createDistanceFieldShader(Graphics graphics) {
         String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -141,7 +142,7 @@ public class DistanceFieldFont extends BitmapFont {
                 + "	}\n" //
                 + "}\n";
 
-        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        ShaderProgram shader = new ShaderProgram(graphics, vertexShader, fragmentShader);
         if (!shader.isCompiled())
             throw new IllegalArgumentException("Error compiling distance field shader: " + shader.getLog());
         return shader;

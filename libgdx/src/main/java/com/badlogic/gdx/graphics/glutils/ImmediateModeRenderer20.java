@@ -48,15 +48,15 @@ public class ImmediateModeRenderer20 implements ImmediateModeRenderer {
     private final Matrix4 projModelView = new Matrix4();
     private final float[] vertices;
     private final String[] shaderUniformNames;
-	private Graphics graphics;
+    private Graphics graphics;
 
-	public ImmediateModeRenderer20(Graphics graphics, boolean hasNormals, boolean hasColors, int numTexCoords) {
-        this(graphics, 5000, hasNormals, hasColors, numTexCoords, createDefaultShader(hasNormals, hasColors, numTexCoords));
+    public ImmediateModeRenderer20(Graphics graphics, boolean hasNormals, boolean hasColors, int numTexCoords) {
+        this(graphics, 5000, hasNormals, hasColors, numTexCoords, createDefaultShader(graphics, hasNormals, hasColors, numTexCoords));
         ownsShader = true;
     }
 
     public ImmediateModeRenderer20(Graphics graphics, int maxVertices, boolean hasNormals, boolean hasColors, int numTexCoords) {
-        this(graphics,maxVertices, hasNormals, hasColors, numTexCoords, createDefaultShader(hasNormals, hasColors, numTexCoords));
+        this(graphics, maxVertices, hasNormals, hasColors, numTexCoords, createDefaultShader(graphics, hasNormals, hasColors, numTexCoords));
         ownsShader = true;
     }
 
@@ -64,9 +64,9 @@ public class ImmediateModeRenderer20 implements ImmediateModeRenderer {
         this.maxVertices = maxVertices;
         this.numTexCoords = numTexCoords;
         this.shader = shader;
-		this.graphics = graphics;
+        this.graphics = graphics;
 
-		VertexAttribute[] attribs = buildVertexAttributes(hasNormals, hasColors, numTexCoords);
+        VertexAttribute[] attribs = buildVertexAttributes(hasNormals, hasColors, numTexCoords);
         mesh = new Mesh(graphics, false, maxVertices, 0, attribs);
 
         vertices = new float[maxVertices * (mesh.getVertexAttributes().vertexSize / 4)];
@@ -238,10 +238,10 @@ public class ImmediateModeRenderer20 implements ImmediateModeRenderer {
     /**
      * Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified.
      */
-    static public ShaderProgram createDefaultShader(boolean hasNormals, boolean hasColors, int numTexCoords) {
+    static public ShaderProgram createDefaultShader(Graphics graphics, boolean hasNormals, boolean hasColors, int numTexCoords) {
         String vertexShader = createVertexShader(hasNormals, hasColors, numTexCoords);
         String fragmentShader = createFragmentShader(hasNormals, hasColors, numTexCoords);
-        ShaderProgram program = new ShaderProgram(vertexShader, fragmentShader);
+        ShaderProgram program = new ShaderProgram(graphics, vertexShader, fragmentShader);
         return program;
     }
 }

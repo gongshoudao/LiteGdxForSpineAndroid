@@ -16,6 +16,8 @@
 
 package com.badlogic.gdx.graphics.profiling;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import static com.badlogic.gdx.graphics.profiling.GLInterceptor.resolveErrorNumber;
@@ -52,9 +54,9 @@ public interface GLErrorListener {
 			}
 
 			if (place != null) {
-				Gdx.app.error("GLProfiler", "Error " + resolveErrorNumber(error) + " from " + place);
+				Log.e("GLProfiler", "Error " + resolveErrorNumber(error) + " from " + place);
 			} else {
-				Gdx.app.error("GLProfiler", "Error " + resolveErrorNumber(error) + " at: ", new Exception());
+				Log.e("GLProfiler", "Error " + resolveErrorNumber(error) + " at: ", new Exception());
 				// This will capture current stack trace for logging, if possible
 			}
 		}

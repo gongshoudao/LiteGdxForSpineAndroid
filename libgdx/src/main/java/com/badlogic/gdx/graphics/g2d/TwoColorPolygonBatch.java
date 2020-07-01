@@ -110,7 +110,7 @@ public class TwoColorPolygonBatch implements PolygonBatch {
 
         vertices = new float[maxVertices * 6];
         triangles = new short[maxTriangles * 3];
-        defaultShader = createDefaultShader();
+        defaultShader = createDefaultShader(graphics);
         shader = defaultShader;
         projectionMatrix.setToOrtho2D(0, 0, graphics.getWidth(), graphics.getHeight());
     }
@@ -1476,7 +1476,7 @@ public class TwoColorPolygonBatch implements PolygonBatch {
         return blendDstFuncAlpha;
     }
 
-    private ShaderProgram createDefaultShader() {
+    private ShaderProgram createDefaultShader(Graphics graphics) {
         String vertexShader = "attribute vec4 a_position;\n" //
                 + "attribute vec4 a_light;\n" //
                 + "attribute vec4 a_dark;\n" //
@@ -1512,7 +1512,7 @@ public class TwoColorPolygonBatch implements PolygonBatch {
                 + "  gl_FragColor.rgb = ((texColor.a - 1.0) * u_pma + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;\n" //
                 + "}";
 
-        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        ShaderProgram shader = new ShaderProgram(graphics, vertexShader, fragmentShader);
         if (shader.isCompiled() == false)
             throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         return shader;

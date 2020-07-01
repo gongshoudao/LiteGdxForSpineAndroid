@@ -110,7 +110,7 @@ public class SpriteBatch implements Batch {
      * respect to the current screen resolution.
      * <p>
      * The defaultShader specifies the shader to use. Note that the names for uniforms for this default shader are different than
-     * the ones expect for shaders set with {@link #setShader(ShaderProgram)}. See {@link #createDefaultShader()}.
+     * the ones expect for shaders set with {@link #setShader(ShaderProgram)}. See {@link #createDefaultShader(Graphics)}.
      *
      * @param graphics
      * @param size          The max number of sprites in a single batch. Max of 8191.
@@ -146,7 +146,7 @@ public class SpriteBatch implements Batch {
         mesh.setIndices(indices);
 
         if (defaultShader == null) {
-            shader = createDefaultShader();
+            shader = createDefaultShader(graphics);
             ownsShader = true;
         } else
             shader = defaultShader;
@@ -154,8 +154,10 @@ public class SpriteBatch implements Batch {
 
     /**
      * Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified.
+     *
+     * @param graphics
      */
-    static public ShaderProgram createDefaultShader() {
+    static public ShaderProgram createDefaultShader(Graphics graphics) {
         String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -184,7 +186,7 @@ public class SpriteBatch implements Batch {
                 + "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
                 + "}";
 
-        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        ShaderProgram shader = new ShaderProgram(graphics, vertexShader, fragmentShader);
         if (!shader.isCompiled())
             throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         return shader;
