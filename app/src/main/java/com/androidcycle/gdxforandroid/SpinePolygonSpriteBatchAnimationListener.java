@@ -67,14 +67,13 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         if (attachment instanceof MeshAttachment) {
             TextureRegion region = ((MeshAttachment) attachment).getRegion();
             try {
-                FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir() + "/texture/ic_launcher_round.png");
-                Texture texture = new Texture(fileHandle, app);
-                region.setRegion(texture);
+//                FileHandle fileHandle = new FileHandle(SpineApp.getInstance().getFilesDir() + "/texture/ic_launcher_round.png");
+//                Texture texture = new Texture(fileHandle, app);
+//                region.setRegion(texture);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (attachment instanceof RegionAttachment) {
-            TextureRegion region = ((RegionAttachment) attachment).getRegion();
             try {
                 Texture textureText = testTextByAndroid(app);
                 TextureRegion textureRegion = new TextureRegion(textureText);
@@ -91,7 +90,7 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
 
         state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
-        state.setTimeScale(0.5f); // Slow all animations down to 30% speed.
+        state.setTimeScale(1f); // Slow all animations down to 30% speed.
         state.addListener(new AnimationState.AnimationStateListener() {
             @Override
             public void start(AnimationState.TrackEntry entry) {
@@ -170,9 +169,9 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
             skeleton.updateWorldTransform(); // Uses the bones' local SRT to compute their world SRT.
 
         // Configure the camera, SpriteBatch, and SkeletonRendererDebug.
-        camera.update();
-        batch.getProjectionMatrix().set(camera.combined);
-        debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
+//        camera.update();
+//        batch.getProjectionMatrix().set(camera.combined);
+//        debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
 
         batch.begin();
         renderer.draw(batch, skeleton); // Draw the skeleton images.

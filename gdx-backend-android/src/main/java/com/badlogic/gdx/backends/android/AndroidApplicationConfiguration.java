@@ -38,7 +38,7 @@ public class AndroidApplicationConfiguration {
 	public int numSamples = 0;
 
 	/** whether to use the accelerometer. default: true **/
-	public boolean useAccelerometer = true;
+	public boolean useAccelerometer = false;
 	
 	/** whether to use the gyroscope. default: false **/
 	public boolean useGyroscope = false;
@@ -49,7 +49,7 @@ public class AndroidApplicationConfiguration {
 	 * If {@link #useRotationVectorSensor} is true and the rotation vector sensor is available, the compass will not be used.
 	 * <p>
 	 * Default: true **/
-	public boolean useCompass = true;
+	public boolean useCompass = false;
 
 	/** Whether to use Android's rotation vector software sensor, which provides cleaner data than that of {@link #useCompass} for
 	 * {@link Input#getRotationMatrix(float[])}, {@link Input#getAzimuth()}, {@link Input#getPitch()}, and {@link Input#getRoll()}.

@@ -61,7 +61,7 @@ public class SpineTwoColorPolygonBatchAnimationListener extends ApplicationAdapt
         AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
 
         state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
-        state.setTimeScale(0.5f); // Slow all animations down to 30% speed.
+        state.setTimeScale(1f); // Slow all animations down to 30% speed.
         state.addListener(new AnimationState.AnimationStateListener() {
             @Override
             public void start(AnimationState.TrackEntry entry) {
@@ -149,9 +149,9 @@ public class SpineTwoColorPolygonBatchAnimationListener extends ApplicationAdapt
             skeleton.updateWorldTransform(); // Uses the bones' local SRT to compute their world SRT.
 
         // Configure the camera, SpriteBatch, and SkeletonRendererDebug.
-        camera.update();
-        batch.getProjectionMatrix().set(camera.combined);
-        debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
+//        camera.update();
+//        batch.getProjectionMatrix().set(camera.combined);
+//        debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
 
         batch.begin();
         renderer.draw(batch, skeleton); // Draw the skeleton images.
