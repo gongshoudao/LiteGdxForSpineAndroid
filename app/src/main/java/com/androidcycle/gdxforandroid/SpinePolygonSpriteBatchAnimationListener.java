@@ -22,6 +22,7 @@ import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Event;
 import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonBinary;
 import com.esotericsoftware.spine.SkeletonBounds;
 import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonJson;
@@ -55,9 +56,11 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
         debugRenderer = new SkeletonRendererDebug(graphics);
 
         atlas = new TextureAtlas(Gdx.files.internal("raptor/raptor-pma.atlas"), app);
-        SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
-        json.setScale(1f); // Load the skeleton at 60% the size it was in Spine.
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("raptor/raptor-pro.json"));
+//        SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON data, which is stateless.
+//        json.setScale(1f); // Load the skeleton at 60% the size it was in Spine.
+//        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("raptor/raptor-pro.skel"));
+        SkeletonBinary skeletonBinary = new SkeletonBinary(atlas);
+        SkeletonData skeletonData = skeletonBinary.readSkeletonData(Gdx.files.internal("raptor/raptor-pro.skel"));
 
         skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
         skeleton.setPosition(350, 0);
