@@ -26,10 +26,6 @@ package com.badlogic.gdx;
  * @author mzechner
  */
 public class Gdx {
-    @Deprecated
-    public static Application app;
     public static Audio audio;
-    @Deprecated
-    public static Input input;
     public static Files files;
 }

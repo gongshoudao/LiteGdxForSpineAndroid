@@ -146,8 +146,6 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 			}
 		});
 
-		Gdx.app = this;
-		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 
@@ -252,8 +250,6 @@ public class AndroidApplication extends Activity implements AndroidApplicationBa
 
 	@Override
 	protected void onResume () {
-		Gdx.app = this;
-		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 

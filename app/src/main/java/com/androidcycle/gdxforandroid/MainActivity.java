@@ -52,9 +52,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     @Override
     public void exit() {
-        Gdx.app = null;
         Gdx.audio = null;
-        Gdx.input = null;
         Gdx.files = null;
     }
 }

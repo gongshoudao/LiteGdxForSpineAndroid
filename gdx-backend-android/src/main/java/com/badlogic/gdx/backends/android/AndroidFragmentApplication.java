@@ -160,8 +160,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 			}
 		});
 
-		Gdx.app = this;
-		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 		createWakeLock(config.useWakelock);
@@ -208,8 +206,6 @@ public class AndroidFragmentApplication extends Fragment implements AndroidAppli
 
 	@Override
 	public void onResume () {
-		Gdx.app = this;
-		Gdx.input = this.getInput();
 		Gdx.audio = this.getAudio();
 		Gdx.files = this.getFiles();
 
