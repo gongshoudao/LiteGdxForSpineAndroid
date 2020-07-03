@@ -17,9 +17,14 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 public class SpineFragment<T extends ApplicationListener> extends AndroidFragmentApplication {
 
     private Class<T> mClazz;
+    private T mApplicationListener;
 
     public void setApplicationListenerClass(Class<T> clazz) {
         mClazz = clazz;
+    }
+
+    public void setApplicationListener(T applicationListener) {
+        mApplicationListener = applicationListener;
     }
 
     @Nullable
@@ -37,6 +42,8 @@ public class SpineFragment<T extends ApplicationListener> extends AndroidFragmen
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            listener = mApplicationListener;
         }
         View view = initializeForView(listener, config);
         if (view instanceof SurfaceView) {

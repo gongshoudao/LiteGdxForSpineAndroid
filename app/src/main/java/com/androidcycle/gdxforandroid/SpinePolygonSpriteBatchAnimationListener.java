@@ -159,7 +159,7 @@ public class SpinePolygonSpriteBatchAnimationListener extends ApplicationAdapter
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        camera.setToOrtho(false); // Update camera with new size.
+//        camera.setToOrtho(false); // Update camera with new size.
     }
 
     @Override
