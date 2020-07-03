@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="这串文字其实在最上层test top texttest top texttest top texttest top texttest top texttest top texttest top text但是呢GLSurfaceView优先级更高，所以被GLSurfaceView遮住了"
+        android:text="test top texttest top texttest top texttest top texttest top texttest top texttest top"
         android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,16 +60,34 @@
         android:layout_height="wrap_content"
         android:text="start2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/clear_btn"
+        app:layout_constraintEnd_toStartOf="@id/start_btn_3"
         app:layout_constraintStart_toEndOf="@id/start_btn" />
+
+    <ImageView
+        android:id="@+id/text_gen_bitmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/start_btn_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/start_btn_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gen text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/clear_btn"
+        app:layout_constraintStart_toEndOf="@id/start_btn_2" />
 
     <Button
         android:id="@+id/clear_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="清空"
+        android:text="clean"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/start_btn_2" />
+        app:layout_constraintStart_toEndOf="@id/start_btn_3" />
 
 </android.support.constraint.ConstraintLayout>
